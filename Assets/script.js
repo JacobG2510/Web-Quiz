@@ -1,127 +1,121 @@
-var question1 = 
+quizQuestions = [
     {
-    question: 'whats web API',
-    answers : [
-        { text: 'Cascading Stylesheets', correct: true },
-        { text: 'Application Programming Interface', correct: false }
-
-    ]
-  }
-
-var question2 = 
+      question: "What are attributes in html?",
+      choices: ["Stats for an object", "A modifier of elemental types", "Stats for a video game character", "Additional qualities"],
+      answer: "a modifier of elemental types"
+    },
     {
-    question: 'what is event listener',
-    answers : [
-        { text: 'an event you listen to', correct: true },
-        { text: 'a desgin to prosses some kind of event', correct: false }
-
-    ]
-  }
-
-var question3 = 
+      question: "What some css commands?",
+      choices: ["div", "function", "border-radius", "arrays"],
+      answer: "border-radius"
+    },
     {
-    question: 'whats web API',
-    answers : [
-        { text: 'Cascading Stylesheets', correct: true },
-        { text: 'Application Programming Interface', correct: false }
+      question: "What is javascript and its purpose",
+      choices: ["to put the lay out of the page", "to style the page", "to make the functions work", "to lay out the website plan"],
+      answer: "to make the functions work"
+    }
 
-    ]
-  }
+  ];
+  
+  var startButton = document.getElementById("start-button");
+  var questionElement = document.getElementById("question");
+  var choicesElement = document.getElementById("choices");
+  var timerElement = document.getElementById("timer");
+  var currentQuestionIndex = 0;
+  var timeLeft = 60;
 
-var startButton = document.getElementById('start-btn')
-var nextButton = document.getElementById('next-btn')
-var questionContainerELement = document.getElementById('question-box')
-var questionEL = document.getElementById('question')
-var answerButtonsEL = document.getElementById('answer-buttons')
-
-let shuffledQuestions, currentQuestionIndex
-nextButton.addEventListener('click', () => {
-currentQuestionIndex++
-setNextQuestion
-})
-
-startButton.addEventListener('click', startQuiz)
-
-
-
+  // Function to start the quiz
 function startQuiz() {
-    console.log('started')
-    startButton.classList.add('hide')
-    var unshuffledQuestions = [question1, question2, question3]
-    shuffledQuestions = unshuffledQuestions.sort(() => Math.random() - .5)
-    currentQuestionIndex = 0
-    questionContainerELement.classList.remove("hide")
-    setNextQuestion()
-}
-
-function Timer() {
-    timeInterval = setInterval(function () {
-        timeLeft--;
-
-        if(timeLeft<1) {
-            clearInterval(timeInterval);
-            timeLeft = 0;
-            endQuiz();
+    console.log("working")
+    startButton.style.display = "none";
+    showQuestion();
+    startTimer();
+  
+    choicesElement.addEventListener("click", function(event) {
+      if (event.target.matches("button")) {
+        checkAnswer(event.target.textContent);
+      }
+    });
+  }
+  
+  // Function to show a question
+  function showQuestion() {
+    var question = quizQuestions[currentQuestionIndex];
+    questionElement.textContent = question.question;
+    choicesElement.innerHTML = "";
+  
+    // Create buttons for each choice
+    question.choices.forEach(choice => {
+      var button = document.createElement("button");
+      button.textContent = choice;
+      choicesElement.appendChild(button);
+    });
+  }
+  
+  function checkAnswer(selectedChoice) {
+    var question = quizQuestions[currentQuestionIndex];
+  
+    if (selectedChoice === question.answer) {
+      currentQuestionIndex++;
+      if (currentQuestionIndex === quizQuestions.length) {
+        endQuiz();
+      } else {
+        showQuestion();
+      }
+    } else {
+      // Incorrect answer
+      timeLeft -= 10;
+      if (timeLeft <= 0) {
+        timeLeft = 0;
+        endQuiz();
+      } else {
+        currentQuestionIndex++;
+        if (currentQuestionIndex === quizQuestions.length) {
+          endQuiz();
+        } else {
+          showQuestion();
         }
-        Timer.textcontent = "Timer: 00:" + timeLeft;
+      }
+    }
+  }
+  
+  // Function to start the timer
+  function startTimer() {
+    timerElement.textContent = timeLeft;
+  
+    var timerInterval = setInterval(function() {
+      timeLeft--;
+      timerElement.textContent = timeLeft;
+  
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        endQuiz();
+      }
     }, 1000);
-}
+  }
+  
+  function endQuiz() {
+    questionElement.style.display = "none";
+    choicesElement.style.display = "none";
+    var initials = prompt("enter your initials:");
+    var score = timeLeft;
 
-function setNextQuestion() {
-    resetState()
-    showQuestion(shuffledQuestions[currentQuestionIndex])
-    }
+    var result = {
+      initials: initials,
+      score: score
+    };
+    var results = JSON.parse(localStorage.getItem("quizResults")) || []
+    SpeechRecognitionResultList.push(result);
+    localStorage.setItem("quizResults", JSON.stringify(results));
 
-function showQuestion(question) {
-    console.log(question)
-    questionContainerELement.innerText = question.question.
-    question.answers.forEach( answer => {
-        console.log(answer)
-        var button = document.createElement('button')
-    button.innerText = answer.text
-    button.classList.add('btn')
-    if (answer.correct){
-        button.dataset.correct = answer.correct
-    }
-    button.addEventListener('click', selectAnswer)
-    answerButtonsEL.appendChild(button)
-    })
-}
+  }
+  
 
-function resetState() {
-    clearStatusClass(document.body)
-    nextButton.classList.add('hide')
-    while (answerButtonsEL.firstchild) {
-        answerButtonsEL.removeChild(answerButtonsEL.firstchild)
-    }
-}
-
-function selectAnswer(e) {
-var slelectedButton = e.target
-var correct = slelectedButton.dataset.correct
-setStatusClass(document.body, correct)
-Array.from(answerButtonsEL.children).forEach(button =>{
-    setStatusClass(button, button.dataset.correct)
-})
-if (shuffledQuestions.length > currentQuestionIndex)
-nextButton.classList.remove("hide")
-else {
-    startButton.innerText = 'restart'
-    startButton.classList.remove('hide')
-}
-}
-
-function setStatusClass(element, correct) {
-    clearStatusClass(element)
-    if (correct) {
-    element.classList.add('correct')
-}
-else {
-    element.classList.add('wrong')
-}
-}
-
-function clearStatusClass(element) {
-    element.classList.remove('correct')
-    element.classList.remove('wrong')
-}
+  startButton.addEventListener("click", startQuiz);
+  
+  
+  
+  
+  
+  
+  

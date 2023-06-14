@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Assets/style.css">
-    <script src="./Assets/script.js" defer></script>
-    <title>Coding Quiz</title>
+    <link rel="stylesheet" href="assets/style.css">
+    </link>
+    <title>web quiz</title>
 </head>
-<body>
-    <div id="question-box">
-        <div id="question-container" class="hide">
-            <div id="question">question</div>
-            <div id="answer-buttons" class="btn-grid">
-                <button class="btn">Answer 1</button>
-                <button class="btn">Answer 2</button>
-                <button class="btn">Answer 3</button>
-                <button class="btn">Answer 4</button>
-            </div>
-    </div>
-    <div class="controls">
-        <button id="start-btn" class="start-btn btn">Start</button>
-        <button id="next-btn" class="next-btn btn hide">Start</button>
-    </div>
 
-    
+<body>
+    <div class="header">
+        <h1>Web Quiz</h1>
+        <p>try it out!</p>
+    </div>
+    <div class="card">
+        <section class="card-header">
+            <p>your score will show after you have finished</p>
+        </section>
+        <button id="start-button">Start</button>
+        <p id="question"></p>
+        <div id="choices"></div>
+        <p id="timer"></p>
+    </div>
+    <div id="results-container"></div>
+
+    <footer>
+        <p>thank you for playing!</p>
+    </footer>
+    <script src="assets/script.js"></script>
+
 </body>
+
 </html>
